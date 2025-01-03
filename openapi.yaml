@@ -54,6 +54,31 @@ paths:
                   error:
                     type: string
                     example: "Error retrieving data"
+  /data/warung:
+    get:
+      tags:
+        - warung
+      summary: Mendapatkan semua data warung
+      operationId: getAllWarung
+      responses:
+        "200":
+          description: Daftar warung berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Warung'
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Response:
+                    type: string
+                    example: "Error retrieving data"
 components:
   schemas:
     Tempat:
@@ -111,3 +136,48 @@ components:
             items:
               type: number
               format: float
+    Warung:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: ID unik untuk warung
+        nama_tempat:
+          type: string
+          description: Nama tempat warung
+        lokasi:
+          type: string
+          description: Lokasi warung
+        jam_buka:
+          type: string
+          description: Jam operasional warung
+        metode_pembayaran:
+          type: array
+          items:
+            type: string
+          description: Daftar metode pembayaran yang diterima
+        lon:
+          type: number
+          format: float
+          description: Longitude lokasi
+        lat:
+          type: number
+          format: float
+          description: Latitude lokasi
+        gambar:
+          type: string
+          format: uri
+          description: URL gambar warung
+        province:
+          type: string
+          description: Provinsi tempat warung
+        district:
+          type: string
+          description: Kabupaten atau kota tempat warung
+        sub_district:
+          type: string
+          description: Kecamatan tempat warung
+        village:
+          type: string
+          description: Desa atau kelurahan tempat warung
