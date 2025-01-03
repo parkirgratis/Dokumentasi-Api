@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: Lokasi API
+  description: API untuk mendapatkan data lokasi.
+  version: 1.0.0
+servers:
+  - url: https://asia-southeast2-awangga.cloudfunctions.net/parkirgratis
+paths:
+  /data/lokasi:
+    get:
+      tags:
+        - lokasi
+      summary: Mendapatkan semua data lokasi
+      operationId: getLokasi
+      responses:
+        "200":
+          description: Daftar lokasi berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tempat'
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Response:
+                    type: string
+                    example: "Error retrieving data"
+components:
+  schemas:
+    Tempat:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: ID unik untuk tempat
+        nama_tempat:
+          type: string
+          description: Nama tempat
+        lokasi:
+          type: string
+          description: Lokasi tempat
+        fasilitas:
+          type: string
+          description: Fasilitas yang tersedia
+        lon:
+          type: number
+          format: float
+          description: Longitude lokasi
+        lat:
+          type: number
+          format: float
+          description: Latitude lokasi
+        gambar:
+          type: string
+          format: uri
+          description: URL gambar tempat
+        province:
+          type: string
+          description: Provinsi tempat
+        district:
+          type: string
+          description: Kabupaten atau kota tempat
+        sub_district:
+          type: string
+          description: Kecamatan tempat
+        village:
+          type: string
+          description: Desa atau kelurahan tempat
