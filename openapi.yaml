@@ -102,7 +102,29 @@ paths:
                   error:
                     type: string
                     example: "Error retrieving data"
-             
+  /data/saran:
+    get:
+      tags:
+        - saran
+      summary: Mendapatkan semua data saran
+      operationId: getAllSaran
+      responses:
+        "200":
+          description: Data saran berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Saran'
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error retrieving data"
 components:
   schemas:
     Tempat:
