@@ -125,6 +125,53 @@ paths:
                   error:
                     type: string
                     example: "Error retrieving data"
+  /admin/dashboard:
+    get:
+      tags:
+        - Admin
+      summary: Akses Dashboard Admin
+      description: Endpoint untuk mengakses dashboard admin. Membutuhkan autentikasi JWT.
+      operationId: getAdminDashboard
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Akses dashboard berhasil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Akses dashboard berhasil"
+                  admin_id:
+                    type: string
+                    description: ID admin
+                    example: "64b4f2a3c1a8f6d58b10e5a7"
+        "401":
+          description: Token tidak valid atau tidak ada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized: Missing or invalid token"
+        "403":
+          description: Akses ditolak
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Forbidden: Access denied"
 components:
   schemas:
     Tempat:
@@ -227,18 +274,22 @@ components:
         village:
           type: string
           description: Desa atau kelurahan tempat warung
-    KoordinatWarung:
+    Saran:
       type: object
       properties:
         _id:
           type: string
           format: objectId
-          description: ID unik untuk koordinat marker
-        markers:
-          type: array
-          description: Daftar koordinat marker
-          items:
-            type: array
-            items:
-              type: number
-              format: float
+          description: ID unik untuk saran
+        isi_saran:
+          type: string
+          description: Isi saran
+        created_at:
+          type: string
+          format: date-time
+          description: Tanggal pembuatan saran
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
