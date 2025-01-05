@@ -79,6 +79,30 @@ paths:
                   Response:
                     type: string
                     example: "Error retrieving data"
+  /data/markerwarung:
+    get:
+      tags:
+        - Koordinat Warung
+      summary: Mendapatkan koordinat marker warung lokasi terbaru
+      operationId: getMarkerWarung
+      responses:
+        "200":
+          description: Data marker berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Koordinat'
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error retrieving data"
+             
 components:
   schemas:
     Tempat:
@@ -181,3 +205,18 @@ components:
         village:
           type: string
           description: Desa atau kelurahan tempat warung
+    KoordinatWarung:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: ID unik untuk koordinat marker
+        markers:
+          type: array
+          description: Daftar koordinat marker
+          items:
+            type: array
+            items:
+              type: number
+              format: float
