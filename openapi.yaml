@@ -9,7 +9,7 @@ paths:
   /data/lokasi:
     get:
       tags:
-        - lokasi
+        - Lokasi
       summary: Mendapatkan semua data lokasi
       operationId: getLokasi
       responses:
@@ -34,7 +34,7 @@ paths:
   /data/marker:
     get:
       tags:
-        - marker
+        - Marker
       summary: Mendapatkan koordinat marker lokasi terbaru
       operationId: getMarker
       responses:
@@ -57,7 +57,7 @@ paths:
   /data/warung:
     get:
       tags:
-        - warung
+        - Warung
       summary: Mendapatkan semua data warung
       operationId: getAllWarung
       responses:
@@ -105,7 +105,7 @@ paths:
   /data/saran:
     get:
       tags:
-        - saran
+        - Saran
       summary: Mendapatkan semua data saran
       operationId: getAllSaran
       responses:
@@ -184,6 +184,7 @@ paths:
         content:
           application/json:
             schema:
+              $ref: '#/components/schemas/TempatParkir'
               type: object
               properties:
                 nama_tempat:
@@ -249,7 +250,7 @@ paths:
   /data/koordinat:
     post:
       tags:
-        - koordinat
+        - Koordinat
       summary: Tambah Koordinat
       operationId: postKoordinat
       requestBody:
@@ -292,7 +293,7 @@ paths:
   /data/tempat-warung:
     post:
       tags:
-        - tempat-warung
+        - Tempat-warung
       summary: Tambah Warung
       operationId: postWarung
       requestBody:
@@ -300,7 +301,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Warung'
+              $ref: '#/components/schemas/TempatWarung'
       responses:
         "200":
           description: Warung berhasil ditambahkan
@@ -312,6 +313,49 @@ paths:
                   message:
                     type: string
                     example: "Warung berhasil disimpan"
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request payload"
+        "500":
+          description: Kesalahan pada server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /data/marker-warung:
+    post:
+      tags:
+        - marker-warung
+      summary: Menambahkan koordinat marker warung
+      operationId: postKoordinatWarung
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Koordinat'
+      responses:
+        "200":
+          description: Koordinat marker warung berhasil ditambahkan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Marker warung berhasil disimpan"
         "400":
           description: Terjadi kesalahan dalam permintaan
           content:
@@ -434,6 +478,39 @@ components:
         village:
           type: string
           description: Desa atau kelurahan tempat warung
+    TempatWarung:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: ID unik untuk warung
+        nama_tempat:
+          type: string
+          description: Nama tempat warung
+        lokasi:
+          type: string
+          description: Lokasi warung
+        jam_buka:
+          type: string
+          description: Jam operasional warung
+        metode_pembayaran:
+          type: array
+          items:
+            type: string
+          description: Daftar metode pembayaran yang diterima
+        lon:
+          type: number
+          format: float
+          description: Longitude lokasi
+        lat:
+          type: number
+          format: float
+          description: Latitude lokasi
+        gambar:
+          type: string
+          format: uri
+          description: URL gambar warung
     Saran:
       type: object
       properties:
@@ -470,19 +547,7 @@ components:
           description: Latitude lokasi tempat parkir
         gambar:
           type: string
-          description: Nama file gambar tempat parkir
-        province:
-          type: string
-          description: Provinsi tempat parkir
-        district:
-          type: string
-          description: Kabupaten atau kota tempat parkir
-        sub_district:
-          type: string
-          description: Kecamatan tempat parkir
-        village:
-          type: string
-          description: Desa atau kelurahan tempat parkir       
+          description: Nama file gambar tempat parkir       
   securitySchemes:
     bearerAuth:
       type: http
