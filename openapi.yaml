@@ -375,6 +375,49 @@ paths:
                 properties:
                   error:
                     type: string
+                    example: "Internal server error"
+  /data/datasaran:
+    post:
+      tags:
+        - saran
+      summary: Menyimpan saran pengguna
+      operationId: postSaran
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Saran'
+      responses:
+        "200":
+          description: Saran berhasil disimpan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    example: "Saran berhasil disimpan dengan ID: 60c72b2f9b1d8c11f5c3f9f7"
+        "400":
+          description: Terjadi kesalahan dalam permintaan atau data tidak valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request payload"
+        "500":
+          description: Kesalahan pada server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
                     example: "Internal server error"      
 components:
   schemas:
@@ -481,10 +524,6 @@ components:
     TempatWarung:
       type: object
       properties:
-        _id:
-          type: string
-          format: objectId
-          description: ID unik untuk warung
         nama_tempat:
           type: string
           description: Nama tempat warung
@@ -514,17 +553,19 @@ components:
     Saran:
       type: object
       properties:
-        _id:
+        gmail:
           type: string
-          format: objectId
-          description: ID unik untuk saran
-        isi_saran:
+          description: Alamat email pengirim saran
+        nama:
           type: string
-          description: Isi saran
-        created_at:
+          description: Nama pengirim saran
+        saran_user:
+          type: string
+          description: Isi saran yang diberikan oleh pengguna
+        tanggal:
           type: string
           format: date-time
-          description: Tanggal pembuatan saran
+          description: Tanggal dan waktu saran diberikan
     TempatParkir:
       type: object
       properties:
