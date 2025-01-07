@@ -336,7 +336,7 @@ paths:
   /data/marker-warung:
     post:
       tags:
-        - marker-warung
+        - Marker-warung
       summary: Menambahkan koordinat marker warung
       operationId: postKoordinatWarung
       requestBody:
@@ -379,7 +379,7 @@ paths:
   /data/datasaran:
     post:
       tags:
-        - saran
+        - Saran
       summary: Menyimpan saran pengguna
       operationId: postSaran
       requestBody:
@@ -418,7 +418,63 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: "Internal server error"      
+                    example: "Internal server error"
+  /admin/login:
+    post:
+      tags:
+        - Admin
+      summary: Login admin untuk mendapatkan token
+      operationId: postLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+      responses:
+        "200":
+          description: Login berhasil dan token diberikan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "Login successful"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1N2I4NTkwNi1mMmFiLTQxZGQtODRkZS0yZDMwNzdiOGQxZDciLCJleHBpcmVkX3N0YXJ0Ijo2MjA1NzE0OUBXcCwsGiwiYS4oM3DK"
+        "400":
+          description: Permintaan tidak valid, misalnya input kosong atau data yang salah
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid request body"
+        "401":
+          description: Kredensial tidak valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid credentials"
+        "500":
+          description: Kesalahan pada server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not generate token"      
 components:
   schemas:
     Tempat:
@@ -588,7 +644,16 @@ components:
           description: Latitude lokasi tempat parkir
         gambar:
           type: string
-          description: Nama file gambar tempat parkir       
+          description: Nama file gambar tempat parkir
+    Admin:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Nama pengguna untuk login
+        password:
+          type: string
+          description: Kata sandi pengguna untuk login       
   securitySchemes:
     bearerAuth:
       type: http
