@@ -288,7 +288,50 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: "Internal server error"             
+                    example: "Internal server error"
+  /data/tempat-warung:
+    post:
+      tags:
+        - tempat-warung
+      summary: Tambah Warung
+      operationId: postWarung
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Warung'
+      responses:
+        "200":
+          description: Warung berhasil ditambahkan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Warung berhasil disimpan"
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request payload"
+        "500":
+          description: Kesalahan pada server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"      
 components:
   schemas:
     Tempat:
@@ -405,11 +448,6 @@ components:
           type: string
           format: date-time
           description: Tanggal pembuatan saran
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
     TempatParkir:
       type: object
       properties:
@@ -445,3 +483,8 @@ components:
         village:
           type: string
           description: Desa atau kelurahan tempat parkir       
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
