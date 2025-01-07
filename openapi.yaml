@@ -172,6 +172,80 @@ paths:
                   error:
                     type: string
                     example: "Forbidden: Access denied"
+  /tempat-parkir:
+    post:
+      tags:
+        - Tempat Parkir
+      summary: Tambah Tempat Parkir
+      description: Endpoint untuk menambahkan data tempat parkir baru ke database.
+      operationId: postTempatParkir
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nama_tempat:
+                  type: string
+                  example: "Parkir Gratis Jakarta"
+                  description: Nama tempat parkir
+                lokasi:
+                  type: string
+                  example: "Jl. Merdeka No.1, Jakarta"
+                  description: Lokasi tempat parkir
+                fasilitas:
+                  type: string
+                  example: "Toilet, CCTV, Lahan Luas"
+                  description: Fasilitas yang tersedia
+                lon:
+                  type: number
+                  format: double
+                  example: 106.827183
+                  description: Longitude lokasi tempat parkir
+                lat:
+                  type: number
+                  format: double
+                  example: -6.175394
+                  description: Latitude lokasi tempat parkir
+                gambar:
+                  type: string
+                  example: "gambar1.jpg"
+                  description: Nama file gambar tempat parkir
+      responses:
+        "200":
+          description: Tempat parkir berhasil disimpan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Tempat parkir berhasil disimpan dengan ID: 64b4f2a3c1a8f6d58b10e5a7"
+        "400":
+          description: Data yang dikirim tidak valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request payload"
+        "500":
+          description: Kesalahan pada server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"             
 components:
   schemas:
     Tempat:
@@ -293,3 +367,38 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    TempatParkir:
+      type: object
+      properties:
+        nama_tempat:
+          type: string
+          description: Nama tempat parkir
+        lokasi:
+          type: string
+          description: Lokasi tempat parkir
+        fasilitas:
+          type: string
+          description: Fasilitas yang tersedia
+        lon:
+          type: number
+          format: double
+          description: Longitude lokasi tempat parkir
+        lat:
+          type: number
+          format: double
+          description: Latitude lokasi tempat parkir
+        gambar:
+          type: string
+          description: Nama file gambar tempat parkir
+        province:
+          type: string
+          description: Provinsi tempat parkir
+        district:
+          type: string
+          description: Kabupaten atau kota tempat parkir
+        sub_district:
+          type: string
+          description: Kecamatan tempat parkir
+        village:
+          type: string
+          description: Desa atau kelurahan tempat parkir       
