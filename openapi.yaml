@@ -245,6 +245,49 @@ paths:
                 properties:
                   error:
                     type: string
+                    example: "Internal server error"
+  /data/koordinat:
+    post:
+      tags:
+        - koordinat
+      summary: Tambah Koordinat
+      operationId: postKoordinat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Koordinat'
+      responses:
+        "200":
+          description: Koordinat berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Markers updated"
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request payload"
+        "500":
+          description: Kesalahan pada server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
                     example: "Internal server error"             
 components:
   schemas:
