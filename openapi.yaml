@@ -5,6 +5,9 @@ info:
   version: 1.0.0
 servers:
   - url: https://asia-southeast2-awangga.cloudfunctions.net/parkirgratis
+    description: Server Parkir Gratis
+  - url: https://asia-southeast2-awangga.cloudfunctions.net/petabackend
+    description: Server Petapedia Backend
 paths:
   /data/lokasi:
     get:
@@ -250,7 +253,7 @@ paths:
   /data/koordinat:
     post:
       tags:
-        - Koordinat
+        - Marker Parkir
       summary: Tambah Koordinat
       operationId: postKoordinat
       requestBody:
@@ -475,6 +478,33 @@ paths:
                   message:
                     type: string
                     example: "Could not generate token"      
+  /data/gis/lokasi:
+    post:
+      tags:
+        - Petapedia 
+      summary: Get Data Region
+      description: Desa/Kelurahan Kecamatan Kabupaten Provinsi
+      security:
+        - token: []
+      operationId: getGeoJSON
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LongLat'
+            example:
+              long: 107.5758500037501
+              lat: -6.874720427234501
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRegionResponse'
+        '400':
+          description: Invalid status value
 components:
   schemas:
     Tempat:
@@ -653,9 +683,33 @@ components:
           description: Nama pengguna untuk login
         password:
           type: string
-          description: Kata sandi pengguna untuk login       
+          description: Kata sandi pengguna untuk login
+    LongLat:
+      type: object
+      properties:
+        long:
+          type: number
+          format: float
+          description: "Longitude coordinate"
+        lat:
+          type: number
+          format: float
+          description: "Latitude coordinate"
+      required:
+        - long
+        - lat
+      example:
+        long: 107.5758500037501
+        lat: -6.874720427234501    
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    token:
+      type: apiKey
+      name: Login
+      in: header 
+
+security:
+  - bearerAuth: [] 
