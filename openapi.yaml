@@ -12,7 +12,7 @@ paths:
   /data/lokasi:
     get:
       tags:
-        - Lokasi
+        - Tempat Parkir
       summary: Mendapatkan semua data lokasi
       operationId: getLokasi
       responses:
@@ -37,8 +37,8 @@ paths:
   /data/marker:
     get:
       tags:
-        - Marker
-      summary: Mendapatkan koordinat marker lokasi terbaru
+        - Tempat Parkir
+      summary: Mendapatkan koordinat marker parkir terbaru
       operationId: getMarker
       responses:
         "200":
@@ -60,7 +60,7 @@ paths:
   /data/warung:
     get:
       tags:
-        - Warung
+        - Tempat Warung
       summary: Mendapatkan semua data warung
       operationId: getAllWarung
       responses:
@@ -85,7 +85,7 @@ paths:
   /data/markerwarung:
     get:
       tags:
-        - Koordinat Warung
+        - Tempat Warung
       summary: Mendapatkan koordinat marker warung lokasi terbaru
       operationId: getMarkerWarung
       responses:
@@ -253,7 +253,7 @@ paths:
   /data/koordinat:
     post:
       tags:
-        - Marker Parkir
+        - Tempat Parkir
       summary: Tambah Koordinat
       operationId: postKoordinat
       requestBody:
@@ -296,7 +296,7 @@ paths:
   /data/tempat-warung:
     post:
       tags:
-        - Tempat-warung
+        - Tempat Warung
       summary: Tambah Warung
       operationId: postWarung
       requestBody:
@@ -336,10 +336,72 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
+  /data/tempat:
+    delete:
+      tags:
+        - Tempat Parkir
+      summary: Menghapus Tempat Parkir
+      description: Endpoint untuk menghapus data tempat parkir berdasarkan ID.
+      operationId: deleteTempatParkir
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ID dari tempat parkir yang ingin dihapus
+                  example: "64b4f2a3c1a8f6d58b10e5a7"
+      responses:
+        "200":
+          description: Tempat parkir dan marker berhasil dihapus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Tempat parkir dan marker berhasil dihapus"
+        "400":
+          description: ID tidak valid atau permintaan tidak valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request payload"
+        "404":
+          description: Tempat parkir tidak ditemukan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Tempat parkir tidak ditemukan"
+        "500":
+          description: Kesalahan pada server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
   /data/marker-warung:
     post:
       tags:
-        - Marker-warung
+        - Tempat Warung
       summary: Menambahkan koordinat marker warung
       operationId: postKoordinatWarung
       requestBody:
@@ -422,6 +484,76 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
+  /data/deletewarung:
+    delete:
+      tags:
+        - Tempat Warung
+      summary: Menghapus data warung berdasarkan ID
+      operationId: deleteWarungById
+      responses:
+        "200":
+          description: Warung berhasil dihapus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Warung berhasil dihapus"
+        "400":
+          description: Terjadi kesalahan dalam permintaan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid ID format"
+        "404":
+          description: Warung tidak ditemukan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Tempat warung not found"
+        "500":
+          description: Terjadi kesalahan saat menghapus data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Failed to delete document"
+    /data/markerwarung:
+      get:
+        tags:
+          - Tempat Warung
+        summary: Mendapatkan koordinat marker warung lokasi terbaru
+        operationId: getMarkerWarung
+        responses:
+          "200":
+            description: Data marker berhasil diambil
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Koordinat'
+          "400":
+            description: Terjadi kesalahan dalam permintaan
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Error retrieving data"
   /admin/login:
     post:
       tags:
@@ -675,6 +807,7 @@ components:
         gambar:
           type: string
           description: Nama file gambar tempat parkir
+          
     Admin:
       type: object
       properties:
