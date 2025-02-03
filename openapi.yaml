@@ -136,7 +136,7 @@ paths:
       description: Endpoint untuk mengakses dashboard admin. Membutuhkan autentikasi JWT.
       operationId: getAdminDashboard
       security:
-        - bearerAuth: []
+        - LoginJWT: []
       responses:
         "200":
           description: Akses dashboard berhasil
@@ -624,7 +624,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LongLat'
+              $ref: '#/components/schemas/LongLatPedia'
             example:
               long: 107.5758500037501
               lat: -6.874720427234501
@@ -637,48 +637,227 @@ paths:
                 $ref: '#/components/schemas/DataRegionResponse'
         '400':
           description: Invalid status value
+  /data/gis/lokasiparkir:
+      post:
+        tags:
+          - Petapedia
+        summary: Menyimpan data parkir dari petadia
+        description: Add a new region to the database
+        operationId: insertRegion
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TempatPedia'
+        responses:
+          '200':
+            description: Region successfully saved
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: "Success"
+                    message:
+                      type: string
+                      example: "Region successfully saved"
+          '400':
+            description: Invalid request data
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Incomplete region data"
+          '500':
+            description: Internal server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Failed to save region to MongoDB"
+  /data/gis/lokasiwarung:
+      post:
+        tags:
+          - Petapedia
+        summary: Menyimpan data warung dari petapedia
+        description: Add a new warung region to the database
+        operationId: insertWarungRegion
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarungPedia'
+        responses:
+          '200':
+            description: Warung region successfully saved
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: "Success"
+                    message:
+                      type: string
+                      example: "Region successfully saved"
+          '400':
+            description: Invalid or incomplete request data
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Incomplete region data"
+          '500':
+            description: Internal server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Failed to save region to MongoDB"
 components:
   schemas:
-    Tempat:
+    WarungPedia:
       type: object
       properties:
-        _id:
+        ID:
           type: string
-          format: objectId
-          description: ID unik untuk tempat
-        nama_tempat:
+          format: uuid
+          description: Unique identifier for the region
+          example: "507f1f77bcf86cd799439011"
+        Nama_Tempat:
           type: string
-          description: Nama tempat
-        lokasi:
+          description: Name of the shop (warung)
+          example: "Warung Kopi"
+        Lokasi:
           type: string
-          description: Lokasi tempat
-        fasilitas:
+          description: Location address of the shop
+          example: "Jl. Raya No.1"
+        Jam_Buka:
           type: string
-          description: Fasilitas yang tersedia
-        lon:
+          description: Opening hours of the shop
+          example: "08:00 - 22:00"
+        Metode_Pembayaran:
+          type: array
+          items:
+            type: string
+            example: "Cash"
+        Lon:
           type: number
           format: float
-          description: Longitude lokasi
-        lat:
+          description: Longitude coordinate of the shop
+          example: 106.789
+        Lat:
           type: number
           format: float
-          description: Latitude lokasi
-        gambar:
+          description: Latitude coordinate of the shop
+          example: -6.174
+        Gambar:
           type: string
-          format: uri
-          description: URL gambar tempat
-        province:
+          description: Image file name (URL)
+          example: "image.png"
+        Province:
           type: string
-          description: Provinsi tempat
-        district:
+          description: Province name
+          example: "Jawa Barat"
+        District:
           type: string
-          description: Kabupaten atau kota tempat
-        sub_district:
+          description: District name
+          example: "Bandung"
+        SubDistrict:
           type: string
-          description: Kecamatan tempat
-        village:
+          description: Subdistrict name
+          example: "Cicendo"
+        Village:
           type: string
-          description: Desa atau kelurahan tempat
+          description: Village name
+          example: "Kelurahan A"
+      required:
+        - Nama_Tempat
+        - Lokasi
+        - Jam_Buka
+        - Metode_Pembayaran
+        - Lon
+        - Lat
+        - Province
+        - District
+        - SubDistrict
+        - Village
+    TempatPedia:
+      type: object
+      properties:
+        ID:
+          type: string
+          format: uuid
+          description: Unique identifier for the region
+          example: "507f1f77bcf86cd799439011"
+        Nama_Tempat:
+          type: string
+          description: Name of the place
+          example: "Parkir Gratis"
+        Lokasi:
+          type: string
+          description: Location address of the place
+          example: "Jl. Merdeka No.10"
+        Fasilitas:
+          type: string
+          description: Available facilities at the location
+          example: "Toilet, Wifi"
+        Lon:
+          type: number
+          format: float
+          description: Longitude coordinate of the place
+          example: 106.789
+        Lat:
+          type: number
+          format: float
+          description: Latitude coordinate of the place
+          example: -6.174
+        Gambar:
+          type: string
+          description: Image file name (URL)
+          example: "image.png"
+        Province:
+          type: string
+          description: Province name
+          example: "Jawa Barat"
+        District:
+          type: string
+          description: District name
+          example: "Bandung"
+        SubDistrict:
+          type: string
+          description: Subdistrict name
+          example: "Cicendo"
+        Village:
+          type: string
+          description: Village name
+          example: "Kelurahan A"
+      required:
+        - Nama_Tempat
+        - Lokasi
+        - Lon
+        - Lat
+        - Province
+        - District
+        - SubDistrict
+        - Village
     Koordinat:
       type: object
       properties:
@@ -833,9 +1012,65 @@ components:
         - lat
       example:
         long: 107.5758500037501
-        lat: -6.874720427234501    
+        lat: -6.874720427234501
+    schemas:
+    LongLatPedia:
+      type: object
+      properties:
+        long:
+          type: number
+          format: double
+          description: Longitude dari lokasi yang dikirim.
+          example: 107.5758500037501
+        lat:
+          type: number
+          format: double
+          description: Latitude dari lokasi yang dikirim.
+          example: -6.874720427234501
+
+    DataRegionResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID unik dari region (ObjectID MongoDB).
+          example: 60f7f9ee4f1a4a3d2c8f9c0b
+        province:
+          type: string
+          description: Nama provinsi.
+          example: Jawa Barat
+        district:
+          type: string
+          description: Nama kabupaten/kota.
+          example: Kabupaten Bandung
+        sub_district:
+          type: string
+          description: Nama kecamatan.
+          example: Soreang
+        village:
+          type: string
+          description: Nama desa/kelurahan.
+          example: Desa Pamekaran
+        border:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Tipe geometri, biasanya "Polygon".
+              example: Polygon
+            coordinates:
+              type: array
+              description: Koordinat batas wilayah dalam format GeoJSON.
+              items:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: number
+                    format: double
+              example: [[[107.5745, -6.8723], [107.5758, -6.8747], [107.5770, -6.8730], [107.5745, -6.8723]]] 
   securitySchemes:
-    bearerAuth:
+    LoginJWT:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -845,4 +1080,4 @@ components:
       in: header 
 
 security:
-  - bearerAuth: [] 
+  - LoginJWT: [] 
